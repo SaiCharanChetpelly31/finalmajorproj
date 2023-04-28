@@ -94,7 +94,7 @@ function AdminEventPage() {
     useEffect(() => {
         fetchEvent();
     }, [eventId]); // fetch event on component mount and when eventId changes
-
+    console.log(eventData)
     if (!eventData || !eventData.cover)
         // If event data isn't loaded correctly, it should recall API
         return <div onLoad={fetchEvent()}>loading...</div>;

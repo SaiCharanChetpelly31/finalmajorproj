@@ -136,12 +136,12 @@ function UserDashboard() {
                                                     </div>
                                                     {/* Star component */}
                                                     <div className="flex flex-col justify-end items-center">
-                                                        <span className="w-full flex flex-row items-center">
+                                                        {/* <span className="w-full flex flex-row items-center">
                                                             <FaUsers />
                                                             <span className="ml-2 text-sm">
-                                                                4,92
+                                                                {event.participants.length}
                                                             </span>
-                                                        </span>
+                                                        </span> */}
                                                         <p className="text-sm text-gray-800 mt-2">
                                                             <strong className="whitespace-nowrap">
                                                                 ₹ {event.price}

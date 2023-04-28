@@ -6,6 +6,7 @@ function Dashboard_Filter({
     filterOptions = {
         keyword: "",
         category: "",
+        college:"",
         dateRange: "",
         price: [10, 3000],
     },
@@ -22,6 +23,9 @@ function Dashboard_Filter({
             case "category":
                 setFilterOptions({ ...filterOptions, category: value });
                 break;
+            case "college":
+                setFilterOptions({ ...filterOptions, college: value });
+                break;
             case "dateRange":
                 setFilterOptions({ ...filterOptions, dateRange: value });
                 break;
@@ -34,7 +38,7 @@ function Dashboard_Filter({
     const handlePriceChange = (value) => {
         setFilterOptions({ ...filterOptions, price: [...value] });
     };
-
+    console.log(filterOptions)
     return (
         // Add filter options to the DOM element
         <div>
@@ -71,9 +75,30 @@ function Dashboard_Filter({
                         className="filterInput"
                     >
                         <option value="">Select a category...</option>
-                        <option value="category1">Technical</option>
-                        <option value="category2">Comic</option>
-                        <option value="category3">Personalized</option>
+                        <option value="Technical">Technical</option>
+                        <option value="Non-Technical">Non-Technical</option>
+                        <option value="Cultural">Cultural</option>
+                    </select>
+                </div>
+               
+                <div className="mb-2">
+                    <label
+                        htmlFor="college"
+                        className="font-medium block mb-1"
+                    >
+                        College
+                    </label>
+                    <select
+                        id="college"
+                        name="college"
+                        value={filterOptions.college}
+                        onChange={handleInputChange}
+                        className="filterInput"
+                    >
+                        <option value="">Select a college...</option>
+                        <option value="MVSR">MVSR</option>
+                        <option value="SPHN">SPHN</option>
+                        <option value="CVR">CVR</option>
                     </select>
                 </div>
                 {/* Input field to filter through a date range */}

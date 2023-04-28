@@ -74,8 +74,11 @@ export default function payment() {
 
     const handleToken = async (event, token, addresses) => {
         // Fetching user_token cookie value in user_id
+        
         const user_id = getUserToken();
-
+        console.log(user_id)
+        console.log("token is",token)
+        console.log("event is" ,event)
         // console.log("Payment gateway cookie fetch - ", user_id);
         try {
             const response = await fetch(

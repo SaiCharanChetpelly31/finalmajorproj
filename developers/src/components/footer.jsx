@@ -5,7 +5,7 @@ function Footer() {
         <div className="foot">
             <center>
                 <p className="foot-text">
-                    Copyright {new Date().getFullYear()} | InVITe
+                    Copyright {new Date().getFullYear()} | Invite
                 </p>
             </center>
         </div>

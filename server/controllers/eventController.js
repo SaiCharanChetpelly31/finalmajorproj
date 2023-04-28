@@ -31,9 +31,7 @@ function sendCheckInMail(data) {
            Registration Number: ${data.regNo}<br>
            Contact Number: ${data.number}<br><br>
            If you have any questions or concerns, please don't hesitate to contact us:<br>
-           Anurag Singh: 2002anuragksingh@gmail.com<br>
-           Devanshu Yadav: devanshu.yadav2020@vitbhopal.ac.in<br>
-           Saksham Gupta: saksham.gupta2020@vitbhopal.ac.in<br><br>
+           Sai Charan Chetpelly: saicharanchetpelly31@gmail.com<br><br>
            Thank you for choosing InVITe!<br><br>
            Best regards,<br>
            The InVITe Team`,
@@ -58,6 +56,8 @@ const postEvent = async (req, res) => {
     const Profile = req.body.profile;
     const Cover = req.body.cover;
     const Organizer = req.body.organizer;
+    const category = req.body.category;
+    const college = req.body.college;
 
     const adminId = req.body.admin_id;
     console.log("Admin mil gaya: ", adminId);
@@ -80,6 +80,9 @@ const postEvent = async (req, res) => {
         profile: Profile,
         cover: Cover,
         organizer: Organizer,
+        category:category,
+        admin_id:adminId,
+        college:college
     });
 
     try {
@@ -136,6 +139,17 @@ const allEvents = async (req, res) => {
 };
 
 const particularEvent = async (req, res) => {
+    const eventId = req.body.event_id;
+    Event.find({ event_id: eventId })
+        .then((data) => {
+            res.status(200).send(data[0]);
+        })
+        .catch((err) => {
+            res.status(400).send({ msg: "Error fetching event", error: err });
+        });
+};
+
+const loadparticularEvent = async (req, res) => {
     const eventId = req.body.event_id;
     Event.find({ event_id: eventId })
         .then((data) => {
@@ -225,4 +239,5 @@ module.exports = {
     particularEvent,
     deleteEvent,
     checkin,
+    loadparticularEvent
 };

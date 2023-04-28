@@ -17,7 +17,7 @@ export async function getServerSideProps(context) {
     };
 }
 
-export default function signup({ userIdCookie }) {
+export default function EventRegistration({ userIdCookie }) {
     const [step, setStep] = useState(1);
     const [message, setMessage] = useState({ errorMsg: "", successMsg: "" });
 
@@ -27,7 +27,7 @@ export default function signup({ userIdCookie }) {
     const [regNumber, setRegNumber] = useState("");
     const [username, setUsername] = useState("");
     const router = useRouter();
-
+    const eventId = router.query.eventId;
     useEffect(() => {
         // If cookie found, Redirect to dashboard
         if (userIdCookie) {
@@ -43,7 +43,7 @@ export default function signup({ userIdCookie }) {
 
             // Redirect to dashboard
             setTimeout(() => {
-                router.push("/users/dashboard");
+                router.push(`/event/${eventId}/landingspecificeventuser`);
             }, 800);
         }
     }, []);
@@ -82,7 +82,7 @@ export default function signup({ userIdCookie }) {
 
             // Redirect to dashboard
             setTimeout(() => {
-                router.push("/users/signin");
+                router.push(`/event/${eventId}/eventregistrationsignin`);
             }, 2500);
         }
     };
@@ -134,7 +134,7 @@ export default function signup({ userIdCookie }) {
                 className="cursor-pointer"
             />
             {/* Page heading */}
-            <div className="text-center text-3xl font-bold">Signup Page</div>
+            <div className="text-center text-3xl font-bold">Register for Event Now</div>
 
             {/* Page Content */}
             <div className="max-w-3xl mx-auto mt-10">
@@ -172,7 +172,7 @@ export default function signup({ userIdCookie }) {
                             }`}
                         >
                             <div>02</div>
-                            Complete Signup
+                            Submit
                         </div>
                     </div>
 
@@ -358,11 +358,11 @@ export default function signup({ userIdCookie }) {
                                 </div>
                                 <button
                                     onClick={() =>
-                                        router.push("/users/dashboard")
+                                        router.push(`/event/${eventId}/userspecificevent`)
                                     }
                                     className="mt-4 bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded hover:bg-[color:var(--secondary-color)]"
                                 >
-                                    Go to Dashboard
+                                    Register for Event Now
                                 </button>
                             </div>
                         )

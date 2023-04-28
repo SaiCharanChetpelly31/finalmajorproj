@@ -17,16 +17,14 @@ export async function getServerSideProps(context) {
     };
 }
 
-export default function signup({ userIdCookie }) {
-    const [step, setStep] = useState(1);
-    const [message, setMessage] = useState({ errorMsg: "", successMsg: "" });
-
+export default function EventRegistrationSignIn({ userIdCookie }) {
+    const router = useRouter();
+    
+    const eventId = router.query.eventId;
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
-    const [contactNumber, setContactNumber] = useState("");
-    const [regNumber, setRegNumber] = useState("");
-    const [username, setUsername] = useState("");
-    const router = useRouter();
+    const [step, setStep] = useState(1);
+    const [message, setMessage] = useState({ errorMsg: "", successMsg: "" });
 
     useEffect(() => {
         // If cookie found, Redirect to dashboard
@@ -43,16 +41,15 @@ export default function signup({ userIdCookie }) {
 
             // Redirect to dashboard
             setTimeout(() => {
-                router.push("/users/dashboard");
+                router.push(`/event/${eventId}/landingspecificeventuser`)
             }, 800);
         }
     }, []);
 
-    // Take Email, give OTP
     const handleVerifyEmail = async (event) => {
         event.preventDefault();
         const response = await fetch(
-            `${process.env.NEXT_PUBLIC_API_URL}/user/signup`,
+            `${process.env.NEXT_PUBLIC_API_URL}/user/signin`,
             {
                 method: "POST",
                 headers: {
@@ -71,57 +68,47 @@ export default function signup({ userIdCookie }) {
         } else {
             console.error(`Failed with status code ${response.status}`);
             setMessage({ errorMsg: data.msg, successMsg: "" });
-            // Redirecting to singin if shown "This Email ID is already registered. Try Signing In instead!"
+            // redirect to signup if shown "This Email ID is not registered. Try Signing Up instead!"
             setTimeout(() => {
                 // Set success message
                 setMessage({
-                    errorMsg: "Redirecting you to SignIn ...",
+                    errorMsg: "Redirecting you to SignUp ...",
                     successMsg: "",
                 });
             }, 1700);
 
             // Redirect to dashboard
             setTimeout(() => {
-                router.push("/users/signin");
+                router.push(`/event/${eventId}/eventregistrationsignin`)
             }, 2500);
         }
     };
 
-    // Take all info, return account creating
     const handleSubmit = async (event) => {
         event.preventDefault();
-        // test to check that registration number is in correct format
-        const regExp = /^2451-\d{2}-\d{3}-\d{3}$/; // regular expression pattern for nntttnnnnn format
-        if (regExp.test(regNumber)) {
-            const response = await fetch(
-                `${process.env.NEXT_PUBLIC_API_URL}/user/signup/verify`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                        contactNumber: contactNumber,
-                        otp: otp,
-                        email: email,
-                        regNumber: regNumber.toUpperCase(),
-                        username: username,
-                    }),
-                }
-            );
-            const data = await response.json();
-            if (response.status === 200) {
-                setMessage({ errorMsg: "", successMsg: data.msg });
-                console.log(data);
-                setStep(3); // Move to next step on the same page
-    
-                setUserToken(data.user_id); // set cookie when signed up
-            } else {
-                console.error(`Failed with status code ${response.status}`);
-                setMessage({ errorMsg: data.msg, successMsg: "" });
+        const response = await fetch(
+            `${process.env.NEXT_PUBLIC_API_URL}/user/signin/verify`,
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    email: email,
+                    otp: otp,
+                }),
             }
+        );
+        const data = await response.json();
+        if (response.status === 200) {
+            setMessage({ errorMsg: "", successMsg: data.msg });
+            console.log(data);
+            setStep(3); // Move to next step on the same page
+
+            setUserToken(data.user_id); // set cookie when signed up
         } else {
-            setMessage({ errorMsg: "Registeration Number is not valid", successMsg: "" });
+            console.error(`Failed with status code ${response.status}`);
+            setMessage({ errorMsg: data.msg, successMsg: "" });
         }
     };
 
@@ -134,7 +121,7 @@ export default function signup({ userIdCookie }) {
                 className="cursor-pointer"
             />
             {/* Page heading */}
-            <div className="text-center text-3xl font-bold">Signup Page</div>
+            <div className="text-center text-3xl font-bold">Signin Page</div>
 
             {/* Page Content */}
             <div className="max-w-3xl mx-auto mt-10">
@@ -150,7 +137,7 @@ export default function signup({ userIdCookie }) {
                             className={`h-full border-2 rounded-l-lg px-5 py-2 ${
                                 step >= 1
                                     ? `text-white bg-[color:var(--darker-secondary-color)] border-r-white border-[color:var(--darker-secondary-color)]`
-                                    : `border-[color:var(--darker-secondary-color)] opacity-10 border-dashed`
+                                    : `border-[color:var(--darker-secondary-color)] border-dashed`
                             }`}
                         >
                             <div>01</div>
@@ -172,7 +159,7 @@ export default function signup({ userIdCookie }) {
                             }`}
                         >
                             <div>02</div>
-                            Complete Signup
+                            OTP Verification
                         </div>
                     </div>
 
@@ -212,11 +199,11 @@ export default function signup({ userIdCookie }) {
                 {/* Steps Content */}
                 <div className="bg-white p-5 rounded-lg mt-2">
                     {
-                        /* Step 1 Content */
+                        /* Step 1 Content*/
                         step === 1 && (
                             <form onSubmit={handleVerifyEmail}>
                                 <label className="block mb-2 text-sm font-medium text-gray-700">
-                                    Enter your email address
+                                    Enter your Registered Email address
                                 </label>
                                 <input
                                     type="email"
@@ -226,6 +213,7 @@ export default function signup({ userIdCookie }) {
                                     className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-full"
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
+
                                 <button
                                     type="submit"
                                     className="mt-4 bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded hover:bg-[color:var(--secondary-color)]"
@@ -235,34 +223,18 @@ export default function signup({ userIdCookie }) {
                             </form>
                         )
                     }
-
                     {
                         /* Step 2 Content */
                         step === 2 && (
                             <form onSubmit={handleSubmit}>
-                                {/* EMAIL */}
-                                <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                                        Your email address
-                                    </label>
-                                    <input
-                                        type="email"
-                                        id="email"
-                                        name="email"
-                                        defaultValue={email}
-                                        disabled
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
-                                        // onChange={(e) => setOtp(e.target.value)}
-                                    />
-                                </div>
-
-                                {/* OTP */}
+                                {/* Only OTP in Signin */}
                                 <div>
                                     <label className="block mb-2 text-sm font-medium text-gray-700">
                                         Enter Verification Code
                                     </label>
+
                                     <input
-                                        type="number"
+                                        type="text"
                                         id="otp"
                                         name="otp"
                                         autoComplete="none"
@@ -273,73 +245,15 @@ export default function signup({ userIdCookie }) {
                                     />
                                 </div>
 
-                                {/* USERNAME */}
-                                <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                                        Full Name
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="username"
-                                        name="username"
-                                        value={username}
-                                        autoComplete="none"
-                                        required
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
-                                        onChange={(e) =>
-                                            setUsername(e.target.value)
-                                        }
-                                    />
-                                </div>
-
-                                {/* REG-NUMBER */}
-                                <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                                        Enter your Registration Number
-                                    </label>
-                                    <input
-                                        type="text"
-                                        id="regNumber"
-                                        name="regNumber"
-                                        value={regNumber}
-                                        autoComplete="none"
-                                        required
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
-                                        onChange={(e) =>
-                                            setRegNumber(e.target.value)
-                                        }
-                                    />
-                                </div>
-
-                                {/* CONTACT-NUMBER */}
-                                <div>
-                                    <label className="block mb-2 text-sm font-medium text-gray-700">
-                                        Enter Contact Number
-                                    </label>
-                                    <input
-                                        type="number"
-                                        id="contactNumber"
-                                        name="contactNumber"
-                                        value={contactNumber}
-                                        autoComplete="none"
-                                        required
-                                        className="bg-gray-100 p-2 mx-2 mb-4 focus:outline-none rounded-lg w-10/12"
-                                        onChange={(e) =>
-                                            setContactNumber(e.target.value)
-                                        }
-                                    />
-                                </div>
-
                                 <button
                                     type="submit"
                                     className="mt-4 bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded hover:bg-[color:var(--secondary-color)]"
                                 >
-                                    Complete Signup
+                                    Submit
                                 </button>
                             </form>
                         )
                     }
-
                     {
                         /* Step 3 Content */
                         step === 3 && (
@@ -349,20 +263,21 @@ export default function signup({ userIdCookie }) {
                                         <div className="flex items-center">
                                             <p>
                                                 <span className="font-bold">
-                                                    Success :{" "}
+                                                    Hey there!{" "}
                                                 </span>
-                                                Your account has been created!
+                                                Welcome back, you're
+                                                successfully signed in!
                                             </p>
                                         </div>
                                     </div>
                                 </div>
                                 <button
                                     onClick={() =>
-                                        router.push("/users/dashboard")
+                                        router.push(`/event/${eventId}/landingspecificeventuser`)
                                     }
-                                    className="mt-4 bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded hover:bg-[color:var(--secondary-color)]"
+                                    className="mt-4 bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded hover:bg-[color:var(--secondary-color)] transition ease-in-out"
                                 >
-                                    Go to Dashboard
+                                    Go to your Selected Event
                                 </button>
                             </div>
                         )

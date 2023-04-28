@@ -24,6 +24,9 @@ const adminSchema = new mongoose.Schema(
             default: Date.now,
             index: { expires: "2592000s" },
         },
+        college:{
+            type:String,
+        }
     },
     { timestamps: true }
 );

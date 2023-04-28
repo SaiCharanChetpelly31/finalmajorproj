@@ -1,18 +1,18 @@
 import Slider from "rc-slider";
 import "rc-slider/assets/index.css";
-import React from "react";
-import { GrFormClose } from "react-icons/gr";
+import React, { useState } from "react";
 
-function Popup_Filter({
+function LandingDashBoardFilter({
     filterOptions = {
         keyword: "",
         category: "",
+        college:"",
         dateRange: "",
         price: [10, 3000],
     },
     setFilterOptions,
-    handleClose,
     handleFilterClear,
+    setAdminId
 }) {
     // function to handle filter values
     const handleInputChange = (e) => {
@@ -24,6 +24,9 @@ function Popup_Filter({
             case "category":
                 setFilterOptions({ ...filterOptions, category: value });
                 break;
+            case "college":
+                setFilterOptions({ ...filterOptions, college: value });
+                break;
             case "dateRange":
                 setFilterOptions({ ...filterOptions, dateRange: value });
                 break;
@@ -32,24 +35,16 @@ function Popup_Filter({
         }
     };
 
-    // Handle input change for the status filter
+    // function to handle price change in filters
     const handlePriceChange = (value) => {
         setFilterOptions({ ...filterOptions, price: [...value] });
     };
-
+    console.log(filterOptions)
     return (
         // Add filter options to the DOM element
-        <div className="fixed top-0 left-0 right-0 bottom-0 z-50 mt-[8rem] bg-white p-4">
-            <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-medium">Filter Options</h2>
-                <button
-                    className="text-gray-500 hover:text-gray-700"
-                    onClick={handleClose}
-                >
-                    <GrFormClose className="h-6 w-6" />
-                </button>
-            </div>
-            <form className="flex flex-col gap-y-3" onSubmit={handleClose}>
+        <div>
+            <h2 className="text-lg font-medium mb-2">Filter Options</h2>
+            <form className="flex flex-col gap-y-3">
                 {/* Input to search through keyword */}
                 <div className="mb-2">
                     <label htmlFor="keyword" className="font-medium block mb-1">
@@ -86,6 +81,26 @@ function Popup_Filter({
                         <option value="Cultural">Cultural</option>
                     </select>
                 </div>
+                <div className="mb-2">
+                    <label
+                        htmlFor="college"
+                        className="font-medium block mb-1"
+                    >
+                        Select College
+                    </label>
+                    <select
+                        id="college"
+                        name="college"
+                        value={filterOptions.college}
+                        onChange={handleInputChange}
+                        className="filterInput"
+                    >
+                        <option value="">Select a College...</option>
+                        <option value="MVSR">MVSR</option>
+                        <option value="SPHN">SPHN</option>
+                        <option value="CVR">CVR</option>
+                    </select>
+                </div>
                 {/* Input field to filter through a date range */}
                 <div className="mb-2">
                     <label
@@ -118,13 +133,6 @@ function Popup_Filter({
                         ₹{filterOptions.price[0]} - ₹{filterOptions.price[1]}
                     </p>
                 </div>
-                {/* Button to apply filters */}
-                <button
-                    type="submit"
-                    className="bg-[color:var(--darker-secondary-color)] text-white py-2 px-4 rounded-lg hover:bg-[color:var(--secondary-color)]"
-                >
-                    Apply Filters
-                </button>
             </form>
             <button
                 onClick={handleFilterClear}
@@ -136,4 +144,4 @@ function Popup_Filter({
     );
 }
 
-export default Popup_Filter;
+export default LandingDashBoardFilter;

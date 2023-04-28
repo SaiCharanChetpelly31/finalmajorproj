@@ -1,30 +1,29 @@
-import AdminNavBar from "@/components/AdminNavBar";
-import Dashboard_Filter from "@/components/Dashboard_Filter";
-import Popup_Filter from "@/components/Popup_Filter";
-import { getAdminToken } from "@/utils/getAdminToken";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
-import { AiOutlinePlus } from "react-icons/ai";
 import { FaUsers } from "react-icons/fa";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { setAdminToken } from "@/utils/setAdminToken";
+import Dashboard_Filter from "@/components/Dashboard_Filter";
+import Popup_Filter from "@/components/Popup_Filter";
+import Header from "@/components/Landing_Page_partials/Header";
+import LandingDashBoardFilter from "@/components/LandingDashBoardFilter";
+import { Button, Stack } from "@mui/material";
 
-function UserDashboard() {
+function LandingEvents() {
   const router = useRouter();
-  const [isAdmin, setIsAdmin] = useState(false);
-  const [allEvents, setAllEvents] = useState([]);
+  const picRatio = 0.606;
+
   const [allEventsData, setAllEventsData] = useState([]);
-  const adminIdCookie = getAdminToken();
+  const [admin, setAdmin] = useState([]);
   const [popupFilterOpen, setPopupFilterOpen] = useState(false);
+  const [allAdminsData, setAllAdminsData] = useState([]);
   const [filterOptions, setFilterOptions] = useState({
     keyword: "",
     category: "",
-    college:"",
+    college: "",
     dateRange: "",
     price: [10, 3000],
   });
-  const [originalEvents, setOriginalEvents] = useState([]);
 
   const fetchAllEventsData = async () => {
     const response = await fetch(
@@ -40,20 +39,28 @@ function UserDashboard() {
       console.error("Invalid JSON string:", error.message);
     }
   };
+  const getAllAdminsDetails = async () => {
+    const response = await fetch(`http://localhost:5000/getadmindetails`);
+    if (!response.ok) {
+      throw new Error(`${response.status} ${response.statusText}`);
+    }
+    try {
+      const data = await response.json();
+      setAllAdminsData(data);
+    } catch (error) {
+      console.error("Invalid JSON string:", error.message);
+    }
+  };
 
-  useEffect(() => {
-    fetchAllEventsData();
-  }, []);
+  console.log(allAdminsData);
+  // fetch the user data as soon as the page loads
 
-  console.log(allEventsData);
   // dont move this state becoz it needs allevents
   const [filteredEvents, setFilteredEvents] = useState(allEventsData);
 
   // Update filteredEvents state whenever allEvents or filterOptions change
   useEffect(() => {
     const newFilteredEvents = allEventsData.filter((event) => {
-      console.log("speciifc event");
-      console.log(event);
       // Check if keyword filter matches
       if (
         filterOptions.keyword.toLowerCase() &&
@@ -105,6 +112,7 @@ function UserDashboard() {
     setFilterOptions({
       keyword: "",
       category: "",
+      college: "",
       dateRange: "",
       price: [10, 3000],
     });
@@ -112,23 +120,17 @@ function UserDashboard() {
     setPopupFilterOpen(false);
   };
   useEffect(() => {
-    // Check if at least one event has admin_id equal to local adminCookie
-    const hasAdmin = filteredEvents.some(
-      (event) => event.admin_id === adminIdCookie
-    );
-    setIsAdmin(hasAdmin);
-  }, [filteredEvents, adminIdCookie]);
-  console.log(adminIdCookie)
-  console.log(isAdmin)
+    fetchAllEventsData();
+    getAllAdminsDetails();
+  }, []);
   return (
-    <div className="pt-20 lg:pt-8 overflow-y-hidden bg-[color:var(--primary-color)]">
-      <AdminNavBar />
+    <div className="pt-20 mt-30 lg:pt-8 overflow-y-hidden bg-[color:var(--primary-color)]">
       <div className="flex m-auto">
         <div className="flex mx-auto container ">
-          <div className="flex m-auto gap-4 lg:gap-8 overflow-y-hidden w-full h-[calc(88vh)]">
+          <div className="flex m-auto overflow-y-hidden gap-4 lg:gap-8 w-full h-[calc(88vh)]">
             {/* Render the regular filter for medium screens and above */}
             <div className="hidden md:flex flex-col p-4 sticky top-0 w-1/6 md:w-1/4">
-              <Dashboard_Filter
+              <LandingDashBoardFilter
                 filterOptions={filterOptions}
                 setFilterOptions={setFilterOptions}
                 handleFilterClear={handleFilterClear}
@@ -150,18 +152,14 @@ function UserDashboard() {
             {/* Render the main content of the dashboard */}
             <div className="flex w-full md:w-3/4 mx-auto justify-between container">
               <div className="p-4 overflow-y-auto w-full h-[calc(80vh)]">
+                <h2 className="text-lg font-medium mb-4">Events</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                  {filteredEvents.length === 0 || !isAdmin ? (
+                  {filteredEvents.length === 0 ? (
                     <p>No events yet</p>
                   ) : (
-                    filteredEvents.map((event) =>
-                      event.admin_id !== adminIdCookie ? (
-                        <></>
-                      ) : (
+                    filteredEvents.map((event) => (
+                      <>
                         <div
-                          onClick={() => {
-                            router.push(`/event/${event.event_id}/adminevents`);
-                          }}
                           className="hover:scale-105 cursor-pointer transition-all mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
                           key={event._id}
                         >
@@ -184,11 +182,9 @@ function UserDashboard() {
                                   ? event.name.slice(0, 30) + "..."
                                   : event.name}
                               </p>
-
                               <p className="text-sm text-gray-800">
                                 {event.venue}
                               </p>
-
                               <p className="text-sm text-gray-800">
                                 {event.date}
                               </p>
@@ -197,17 +193,9 @@ function UserDashboard() {
                             <div className="flex flex-col justify-end items-center">
                               <span className="w-full flex flex-row items-center">
                                 <FaUsers />
-
-                                {allEventsData.map((eve) => {
-                                  if (eve.event_id === event.event_id) {
-                                    return (
-                                      <span className="ml-2 text-sm">
-                                        {eve.participants.length}
-                                      </span>
-                                    );
-                                  }
-                                  return null;
-                                })}
+                                <span className="ml-2 text-sm">
+                                  {event.participants.length}
+                                </span>
                               </span>
                               <p className="text-sm text-gray-800 mt-2">
                                 <strong className="whitespace-nowrap">
@@ -216,9 +204,31 @@ function UserDashboard() {
                               </p>
                             </div>
                           </div>
+                          <div className="flex flex-row justify-between">
+                            <a
+                              onClick={() => {
+                                router.push(
+                                  `/event/${event.event_id}/eventregistration`
+                                );
+                              }}
+                              className="btn text-white bg-[color:var(--darker-secondary-color)] hover:bg-[color:var(--secondary-color)] "
+                            >
+                              Register Now
+                            </a>
+                            <a
+                              onClick={() => {
+                                router.push(
+                                  `/event/${event.event_id}/knowmorelandingspecificevent`
+                                );
+                              }}
+                              className="btn text-white bg-[color:var(--darker-secondary-color)] hover:bg-[color:var(--secondary-color)]"
+                            >
+                              Know More
+                            </a>
+                          </div>
                         </div>
-                      )
-                    )
+                      </>
+                    ))
                   )}
                 </div>
               </div>
@@ -233,14 +243,6 @@ function UserDashboard() {
               >
                 <RxHamburgerMenu className="w-6 h-6" />
               </button>
-              {/* Button to open the event form */}
-              <button
-                onClick={() => router.push("/admin/eventForm")}
-                className="mt-4 flex items-center justify-center w-[4rem] h-[4rem] text-white rounded-full bg-[color:var(--darker-secondary-color)] hover:bg-[color:var(--secondary-color)] hover:scale-105 shadow-lg cursor-pointer transition-all ease-in-out focus:outline-none"
-                title="Create Events"
-              >
-                <AiOutlinePlus className="w-6 h-6" />
-              </button>
             </div>
           </div>
         </div>
@@ -249,4 +251,4 @@ function UserDashboard() {
   );
 }
 
-export default UserDashboard;
+export default LandingEvents;

@@ -17,6 +17,7 @@ const setAdmin = async (req, res) => {
         email: req.body.email,
         name: req.body.name,
         pass: req.body.password,
+        college: req.body.college,
     });
 
     await new_admin.save((error, success) => {
@@ -26,7 +27,15 @@ const setAdmin = async (req, res) => {
 
     res.status(200).send({ msg: "Credentials Added" });
 };
-
+const getAllAdminDetails = async (req, res) => {
+    Admin.find({})
+        .then((data) => {
+            res.status(200).send(data);
+        })
+        .catch((err) => {
+            res.status(400).send({ msg: "Error fetching data", error: err });
+        });
+};
 const adminAuth = async (req, res) => {
     const Email = req.body.email;
     const Pass = req.body.password;
@@ -62,4 +71,5 @@ module.exports = {
     setAdmin,
     adminAuth,
     adminDetails,
+    getAllAdminDetails
 };

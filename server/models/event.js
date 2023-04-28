@@ -6,6 +6,9 @@ const eventSchema = new mongoose.Schema(
             type: String,
             requird: true,
         },
+        admin_id:{
+            type:String,
+        },
         name: {
             type: String,
         },
@@ -37,7 +40,16 @@ const eventSchema = new mongoose.Schema(
         organizer: {
             type: String,
         },
+        category : {
+            type: String,
+           
+        },
+        college:{
+            type:String,
+        },
+    
         participants: [],
+        
     },
     { timestamps: true }
 );

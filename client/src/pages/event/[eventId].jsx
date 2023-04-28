@@ -4,6 +4,7 @@ import Head from "next/head";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+import QRCode from "../QrCode/GenerateQR";
 
 function EventPage() {
     const router = useRouter();
@@ -170,6 +171,8 @@ function EventPage() {
                                     </button>
                                 </div>
                             </div>
+                            <QRCode text={eventId}/>
+                            
                         </div>
                     </div>
 
@@ -199,16 +202,16 @@ function EventPage() {
                                     <ul className="text-gray-600">
                                         {[
                                             {
-                                                type: "General*",
+                                                type: "1 Person*",
                                                 price: eventData.price,
                                             },
                                             {
-                                                type: "VIP*",
-                                                price: 2 * eventData.price,
+                                                type: "2 Persons*",
+                                                price: 1.5 * eventData.price,
                                             },
                                             {
-                                                type: "VVIP*",
-                                                price: 4 * eventData.price,
+                                                type: "3 Persons*",
+                                                price: 2.5 * eventData.price,
                                             },
                                         ].map((item, index) => (
                                             <li
@@ -236,7 +239,7 @@ function EventPage() {
                                                 >
                                                     {isUserRegistered
                                                         ? "Registered"
-                                                        : "Buy Tickets"}
+                                                        : "Buy Pass"}
                                                 </button>
                                             </li>
                                         ))}
