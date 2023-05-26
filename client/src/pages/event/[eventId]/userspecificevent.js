@@ -73,25 +73,6 @@ function SpecificUserEvent() {
           <title>{eventData.name}</title>
 
           {/* Top div with image */}
-          <div className="relative h-40 sm:h-[25rem] overflow-hidden container shadow-lg">
-            {/* blurred image background */}
-            <Image
-              src={eventData.cover}
-              alt={eventData.name}
-              fill
-              placeholder="blur"
-              blurDataURL={eventData.cover}
-              className="h-[25rem] container filter blur hidden lg:block object-cover"
-            />
-            <div className="absolute inset-0 w-full h-40 sm:h-[25rem] container">
-              <Image
-                src={eventData.cover}
-                alt="Event image"
-                fill
-                className="absolute object-contain object-center"
-              />
-            </div>
-          </div>
 
           {/* Second div with event details and ticket pricing */}
           <div className="container bg-white py-4 mt-4 rounded-lg shadow-md">
@@ -121,11 +102,11 @@ function SpecificUserEvent() {
                 <div className="text-left lg:text-right mt-4 lg:mt-0">
                   <button
                     onClick={() => {
-                     router.push(`/event/${eventId}/payment`);
+                      router.push(`/event/${eventId}/payment`);
                     }}
                     className="px-6 py-2 bg-[color:var(--darker-secondary-color)] text-white rounded hover:bg-[color:var(--secondary-color)] focus:outline-none"
                   >
-                    Buy Tickets
+                    Buy Pass
                   </button>
                 </div>
               </div>
@@ -155,15 +136,12 @@ function SpecificUserEvent() {
               <div className="grid grid-cols-1 md:grid-cols-[2fr_1fr] gap-4">
                 <div className="mb-4 max-w-5xl bg-white px-6 py-4 rounded-lg shadow-md">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
-                    About the Event
+                    About the Event - Description
                   </h3>
-                  {Array(3)
-                    .fill()
-                    .map((_, index) => (
-                      <p key={index} className="text-gray-600 text-md">
-                        {eventData.description}
-                      </p>
-                    ))}
+
+                  <p className="text-gray-600 text-md">
+                    {eventData.description}
+                  </p>
                 </div>
                 <div className="mb-4 bg-white px-6 py-4 rounded-lg shadow-md">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">

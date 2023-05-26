@@ -66,30 +66,10 @@ function KnowMoreLandingSpecificPage() {
   else
     return (
       <div className="pt-20 lg:pt-8 bg-[color:var(--primary-color)]">
-        
         <div className="flex flex-col items-center justify-center">
           <title>{eventData.name}</title>
 
           {/* Top div with image */}
-          <div className="relative h-40 sm:h-[25rem] overflow-hidden container shadow-lg">
-            {/* blurred image background */}
-            <Image
-              src={eventData.cover}
-              alt={eventData.name}
-              fill
-              placeholder="blur"
-              blurDataURL={eventData.cover}
-              className="h-[25rem] container filter blur hidden lg:block object-cover"
-            />
-            <div className="absolute inset-0 w-full h-40 sm:h-[25rem] container">
-              <Image
-                src={eventData.cover}
-                alt="Event image"
-                fill
-                className="absolute object-contain object-center"
-              />
-            </div>
-          </div>
 
           {/* Second div with event details and ticket pricing */}
           <div className="container bg-white py-4 mt-4 rounded-lg shadow-md">
@@ -155,13 +135,10 @@ function KnowMoreLandingSpecificPage() {
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">
                     About the Event
                   </h3>
-                  {Array(3)
-                    .fill()
-                    .map((_, index) => (
-                      <p key={index} className="text-gray-600 text-md">
-                        {eventData.description}
-                      </p>
-                    ))}
+
+                  <p className="text-gray-600 text-md">
+                    {eventData.description}
+                  </p>
                 </div>
                 <div className="mb-4 bg-white px-6 py-4 rounded-lg shadow-md">
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">

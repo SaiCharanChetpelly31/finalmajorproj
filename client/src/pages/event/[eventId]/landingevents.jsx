@@ -160,7 +160,7 @@ function LandingEvents() {
                     filteredEvents.map((event) => (
                       <>
                         <div
-                          className="hover:scale-105 cursor-pointer transition-all mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
+                          className=" mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
                           key={event._id}
                         >
                           <div className="relative h-[25rem]">

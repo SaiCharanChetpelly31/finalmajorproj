@@ -118,21 +118,7 @@ function LandingDashBoardFilter({
                         className="filterInput"
                     />
                 </div>
-                <div>
-                    <h3>Price</h3>
-                    <Slider
-                        range
-                        min={0}
-                        max={3000}
-                        step={10}
-                        defaultValue={[10, 100]}
-                        value={filterOptions.price}
-                        onChange={handlePriceChange}
-                    />
-                    <p>
-                        ₹{filterOptions.price[0]} - ₹{filterOptions.price[1]}
-                    </p>
-                </div>
+                
             </form>
             <button
                 onClick={handleFilterClear}

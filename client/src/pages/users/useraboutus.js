@@ -29,9 +29,8 @@ function UserAboutUs() {
     <div className="overflow-x-hidden">
       <div className="flex flex-col min-h-screen overflow-x-hidden ">
         {/* <Header className="overflow-x-hidden" /> */}
-        <NavBar/>
+        <NavBar />
         <main className="grow">
-          
           <FeaturesZigZag images={[feature1, feature2, feature3]} />
           {/* <Developers images={[dev1, dev2, dev3]} /> */}
         </main>

@@ -75,10 +75,10 @@ export default function EventRegistration({ userIdCookie }) {
             setTimeout(() => {
                 // Set success message
                 setMessage({
-                    errorMsg: "Redirecting you to SignIn ...",
+                    errorMsg: "Redirecting you to SignIn Page ...",
                     successMsg: "",
                 });
-            }, 1700);
+            }, 2500);
 
             // Redirect to dashboard
             setTimeout(() => {
@@ -154,7 +154,7 @@ export default function EventRegistration({ userIdCookie }) {
                             }`}
                         >
                             <div>01</div>
-                            Verify Email
+                            Verify the Email
                         </div>
                     </div>
 
@@ -259,7 +259,7 @@ export default function EventRegistration({ userIdCookie }) {
                                 {/* OTP */}
                                 <div>
                                     <label className="block mb-2 text-sm font-medium text-gray-700">
-                                        Enter Verification Code
+                                        Enter OTP
                                     </label>
                                     <input
                                         type="number"

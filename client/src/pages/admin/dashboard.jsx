@@ -20,7 +20,7 @@ function UserDashboard() {
   const [filterOptions, setFilterOptions] = useState({
     keyword: "",
     category: "",
-    college:"",
+    college: "",
     dateRange: "",
     price: [10, 3000],
   });
@@ -118,8 +118,8 @@ function UserDashboard() {
     );
     setIsAdmin(hasAdmin);
   }, [filteredEvents, adminIdCookie]);
-  console.log(adminIdCookie)
-  console.log(isAdmin)
+  console.log(adminIdCookie);
+  console.log(isAdmin);
   return (
     <div className="pt-20 lg:pt-8 overflow-y-hidden bg-[color:var(--primary-color)]">
       <AdminNavBar />
@@ -162,7 +162,7 @@ function UserDashboard() {
                           onClick={() => {
                             router.push(`/event/${event.event_id}/adminevents`);
                           }}
-                          className="hover:scale-105 cursor-pointer transition-all mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
+                          className="mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
                           key={event._id}
                         >
                           <div className="relative h-[25rem]">

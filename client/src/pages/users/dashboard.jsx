@@ -21,10 +21,10 @@ function UserDashboard() {
   const [filterOptions, setFilterOptions] = useState({
     keyword: "",
     category: "",
-    college:"",
+    college: "",
     dateRange: "",
     price: [10, 3000],
-  }); 
+  });
 
   const fetchAllEventsData = async () => {
     const response = await fetch(
@@ -86,8 +86,8 @@ function UserDashboard() {
   // Update filteredEvents state whenever allEvents or filterOptions change
   useEffect(() => {
     const newFilteredEvents = allEventsData.filter((event) => {
-      console.log('specific event')
-      console.log(event)
+      console.log("specific event");
+      console.log(event);
       // Check if keyword filter matches
       if (
         filterOptions.keyword.toLowerCase() &&
@@ -98,7 +98,6 @@ function UserDashboard() {
       if (
         filterOptions.category.toLowerCase() &&
         !(event.category.toLowerCase() === filterOptions.category.toLowerCase())
-        
       ) {
         return false;
       }
@@ -106,7 +105,6 @@ function UserDashboard() {
       if (
         filterOptions.college.toLowerCase() &&
         !(event.college.toLowerCase() === filterOptions.college.toLowerCase())
-        
       ) {
         return false;
       }
@@ -136,13 +134,13 @@ function UserDashboard() {
 
     setFilteredEvents(newFilteredEvents);
   }, [allEventsData, filterOptions]);
-  console.log("filtered events")
-console.log(filteredEvents)
+  console.log("filtered events");
+  console.log(filteredEvents);
   const handleFilterClear = () => {
     setFilterOptions({
       keyword: "",
       category: "",
-      college:"",
+      college: "",
       dateRange: "",
       price: [10, 3000],
     });
@@ -183,7 +181,7 @@ console.log(filteredEvents)
             <div className="flex w-full md:w-3/4 mx-auto justify-between container">
               <div className="p-4 overflow-y-auto w-full h-[calc(80vh)]">
                 <h2 className="text-lg font-medium mb-4">Events</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
                   {filteredEvents.length === 0 ? (
                     <p>No events yet</p>
                   ) : (
@@ -192,7 +190,6 @@ console.log(filteredEvents)
                         onClick={() => {
                           router.push(`/event/${event.event_id}`);
                         }}
-                        className="hover:scale-105 cursor-pointer transition-all mt-5 bg-[color:var(--white-color)] rounded-lg shadow-md px-3 py-3"
                         key={event._id}
                       >
                         <div className="relative h-[25rem]">
@@ -242,7 +239,7 @@ console.log(filteredEvents)
                             (e) => e.event_id === event.event_id
                           ).length > 0 ? (
                             <button className="mt-4 bg-[color:green] text-white py-2 px-4 rounded hover:bg-[color:green]">
-                              Registered
+                              Already Registered
                             </button>
                           ) : (
                             <button className="mt-4 bg-[color:red] text-white py-2 px-4 rounded hover:bg-[color:red]">
@@ -275,4 +272,3 @@ console.log(filteredEvents)
 }
 
 export default UserDashboard;
-

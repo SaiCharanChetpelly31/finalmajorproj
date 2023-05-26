@@ -76,12 +76,7 @@ export default function NavBar() {
                             >
                                 <a>Dashboard</a>
                             </li>
-                            <li
-                                onClick={() => router.push("/")}
-                                className="mr-4 cursor-pointer"
-                            >
-                                <a>About us</a>
-                            </li>
+                            
                             <AdminDropdown adminData={adminData} />
                         </ul>
                     </nav>
